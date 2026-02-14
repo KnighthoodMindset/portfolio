@@ -68,7 +68,7 @@ export default function Hero() {
 
             {/* Resume Button */}
             <a
-              href="/Sweety_Resume.pdf"
+              href="/Sweety_AI_Engineer_resume.pdf"
               target="_blank"
               rel="noreferrer"
               className="px-5 py-2 rounded-xl border border-white/15 hover:bg-white/5 transition"
