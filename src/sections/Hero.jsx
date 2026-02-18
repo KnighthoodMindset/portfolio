@@ -34,7 +34,7 @@ export default function Hero() {
                 Sweety
               </div>
               <div className="text-slate-400 text-sm">
-                Full Stack Developer • AI Projects
+                Full Stack Developer • Writer
               </div>
             </div>
           </div>
