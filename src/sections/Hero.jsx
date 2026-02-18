@@ -1,5 +1,5 @@
 import Scene from "../three/Scene";
-import profileImg from "../assets/pfp.jpeg";
+import profileImg from "../assets/pfp.png";
 
 export default function Hero() {
   return (
@@ -21,11 +21,13 @@ export default function Hero() {
 
           {/* Profile Header */}
           <div className="flex items-center gap-4">
-            <img
-              src={profileImg}
-              alt="Sweety"
-              className="h-20 w-20 md:h-24 md:w-24 rounded-2xl object-cover border border-white/20 shadow-lg"
-            />
+          <img
+  src={profileImg}
+  alt="Sweety"
+  className="h-32 w-32 md:h-40 md:w-40 rounded-[28px] object-cover object-top border border-white/20 shadow-lg"
+/>
+
+
 
             <div>
               <div className="text-xl font-semibold text-white">
