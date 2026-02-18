@@ -51,7 +51,7 @@ function Laptop({ position = [-1.5, -0.2, 0], rotation = [0, 0.25, 0] }) {
 /* --------- 3D Book + Pen (right) --------- */
 function BookWithPen({
   position = [1.45, -0.35, 0],
-  rotation = [0, -0.35, 0],
+  rotation = [0, 0, 0],
   label = "sweetyseleena",
 }) {
   return (
@@ -85,27 +85,30 @@ function BookWithPen({
       >
         {label}
       </Text>
+{/* Pen placed flat on top-right side (not piercing) */}
+<group
+  position={[0.35, 0.16, 0.12]}          // x:right, y:above cover, z:front
+  rotation={[Math.PI / 2, 0.25, 0.15]}   // ✅ lay flat (important)
+>
+  {/* Pen body */}
+  <mesh castShadow receiveShadow>
+    <cylinderGeometry args={[0.035, 0.035, 1.05, 24]} />
+    <meshStandardMaterial color="#0b1220" metalness={0.6} roughness={0.25} />
+  </mesh>
 
-      {/* Pen attached (resting diagonally on top) */}
-      <group position={[0.2, 0.12, 0.05]} rotation={[0, 0, -0.55]}>
-        {/* Pen body */}
-        <mesh castShadow receiveShadow>
-          <cylinderGeometry args={[0.04, 0.04, 1.15, 24]} />
-          <meshStandardMaterial color="#0b1220" metalness={0.6} roughness={0.25} />
-        </mesh>
+  {/* Pen tip */}
+  <mesh castShadow receiveShadow position={[0, 0.55, 0]}>
+    <coneGeometry args={[0.04, 0.11, 24]} />
+    <meshStandardMaterial color="#c9cedb" metalness={0.7} roughness={0.3} />
+  </mesh>
 
-        {/* Pen tip */}
-        <mesh castShadow receiveShadow position={[0, -0.62, 0]}>
-          <coneGeometry args={[0.045, 0.12, 24]} />
-          <meshStandardMaterial color="#c9cedb" metalness={0.7} roughness={0.3} />
-        </mesh>
+  {/* Clip */}
+  <mesh castShadow receiveShadow position={[0.05, -0.1, 0]} rotation={[0, 0, 0.35]}>
+    <boxGeometry args={[0.02, 0.22, 0.06]} />
+    <meshStandardMaterial color="#c9cedb" metalness={0.7} roughness={0.35} />
+  </mesh>
+</group>
 
-        {/* Clip */}
-        <mesh castShadow receiveShadow position={[0.05, 0.3, 0]} rotation={[0, 0, 0.25]}>
-          <boxGeometry args={[0.02, 0.25, 0.06]} />
-          <meshStandardMaterial color="#c9cedb" metalness={0.7} roughness={0.35} />
-        </mesh>
-      </group>
     </group>
   );
 }
