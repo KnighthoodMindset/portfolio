@@ -51,6 +51,12 @@ const projects = [
     link: "https://bespoke-donut-cee7c6.netlify.app/",
     tags: ["React"],
   },
+  {
+  title: "Roast My Code",
+  desc: "A VS Code extension that humorously reviews and roasts code while providing useful feedback on code quality, style, and potential improvements.",
+  link: "", // Add extension marketplace link later if available
+  tags: ["VS Code Extension", "JavaScript"],
+  },
 ];
 
 function Tag({ children }) {

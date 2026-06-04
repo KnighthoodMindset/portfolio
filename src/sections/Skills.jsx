@@ -1,11 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-
-const coreStack = [
-  { name: "React.js", note: "Frontend" },
-  { name: "MongoDB", note: "Database" },
-  { name: "Python", note: "Backend/AI" },
-  { name: "FastAPI", note: "APIs" },
-];
+import { useEffect, useMemo, useState, useRef } from "react";
 
 const skillGroups = [
   {
@@ -26,51 +19,73 @@ const skillGroups = [
   {
     title: "AI & Systems",
     desc: "AI-driven experiences and trust-focused systems.",
-    items: ["AI Chatbots", "Automation Systems", "Fraud Detection Logic", "API Integration"],
+    items: ["AI Chatbots", "Automation Systems"],
   },
   {
-  title: "Tools & Documentation",
-  desc: "Development workflow, deployment, and technical documentation.",
-  items: [
-    "Git",
-    "GitHub",
-    "VS Code",
-    "Netlify",
-    "GitHub Pages",
-    "Microsoft Word",
-    "LaTeX"
-  ],
-},
-
+    title: "Tools & Documentation",
+    desc: "Development workflow, deployment, and technical documentation.",
+    items: [
+      "Git",
+      "GitHub",
+      "VS Code",
+      "Netlify",
+      "GitHub Pages",
+      "Microsoft Word",
+      "LaTeX",
+    ],
+  },
 ];
 
+/* -------- Pill -------- */
 function Pill({ children }) {
   return (
-    <span className="px-3 py-1 rounded-full text-sm border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10 transition">
+    <span className="
+      px-3 py-1 rounded-full text-sm border border-white/10 
+      bg-white/5 text-slate-200 
+      transition-all duration-300 ease-out
+      hover:scale-110 hover:-translate-y-1 hover:bg-white/20
+    ">
       {children}
     </span>
   );
 }
 
-function CoreChip({ name, note }) {
-  return (
-    <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition">
-      <div className="text-white font-medium">{name}</div>
-      <div className="text-xs text-slate-400">{note}</div>
-    </div>
-  );
-}
-
+/* -------- Card (SPOTLIGHT + POP) -------- */
 function SkillCard({ title, desc, items }) {
+  const ref = useRef();
+
+  const handleMove = (e) => {
+    const rect = ref.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    ref.current.style.setProperty("--x", `${x}px`);
+    ref.current.style.setProperty("--y", `${y}px`);
+  };
+
   return (
-    <div className="p-5 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h3 className="text-lg font-semibold text-white">{title}</h3>
-          <p className="mt-1 text-sm text-slate-300">{desc}</p>
-        </div>
-        <div className="text-xs text-slate-400 whitespace-nowrap">{items.length} skills</div>
+    <div
+      ref={ref}
+      onMouseMove={handleMove}
+      className="
+        relative overflow-hidden
+        p-5 rounded-2xl border border-white/10 
+        bg-white/5 
+        transition-all duration-300 ease-out
+        
+        hover:-translate-y-3 hover:scale-105
+        hover:shadow-[0_25px_60px_rgba(0,200,255,0.3)]
+        
+        animate-popIn
+      "
+    >
+      {/* Spotlight */}
+      <div className="pointer-events-none absolute inset-0 opacity-0 hover:opacity-100 transition duration-300">
+        <div className="w-full h-full bg-[radial-gradient(circle_at_var(--x)_var(--y),rgba(0,200,255,0.25),transparent_40%)]"></div>
       </div>
+
+      <h3 className="text-lg font-semibold text-white">{title}</h3>
+      <p className="mt-1 text-sm text-slate-300">{desc}</p>
 
       <div className="mt-4 flex flex-wrap gap-2">
         {items.map((s) => (
@@ -81,71 +96,41 @@ function SkillCard({ title, desc, items }) {
   );
 }
 
-/* ---- reveal once ---- */
-function useRevealOnce(threshold = 0.18) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const prefersReduced =
-      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (prefersReduced) {
-      setVisible(true);
-      return;
-    }
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            setVisible(true);
-            io.disconnect();
-            break;
-          }
-        }
-      },
-      { threshold, rootMargin: "0px 0px -10% 0px" }
-    );
-
-    io.observe(el);
-    return () => io.disconnect();
-  }, [threshold]);
-
-  return { ref, visible };
-}
-
-/* ---- Tailwind-only animated wrapper with delay ---- */
+/* -------- Reveal (kept but modified) -------- */
 function Reveal({ show, delay = 0, children }) {
-  const base = "transition-all duration-700 ease-out will-change-transform";
-  const hidden = "opacity-0 translate-y-3 blur-sm";
-  const shown = "opacity-100 translate-y-0 blur-0";
-
   return (
     <div
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`${base} ${show ? shown : hidden}`}
+      style={{ animationDelay: `${delay}ms` }}
+      className={`${show ? "animate-popIn" : "opacity-0"}`}
     >
       {children}
     </div>
   );
 }
 
+/* -------- Main -------- */
 export default function Skills() {
-  const { ref, visible } = useRevealOnce();
-  const badgeText = useMemo(() => "Core Stack: React • MongoDB • Python", []);
+  const [visible, setVisible] = useState(false);
 
-  // Stagger timings
-  const d0 = 0;
-  const step = 90; // change to 70 if you want faster
+  useEffect(() => {
+    setVisible(true);
+  }, []);
+
+  const badgeText = useMemo(
+    () => "Core Stack: React • MongoDB • Python",
+    []
+  );
+
+  const step = 120;
 
   return (
-    <section id="skills" className="mx-auto max-w-6xl px-4 py-14" ref={ref}>
+    <section id="skills" className="relative mx-auto max-w-6xl px-4 py-14 overflow-hidden">
+      
+      {/* 🔥 Animated Gradient Background */}
+      <div className="absolute inset-0 -z-10 animate-gradient bg-gradient-to-r from-[#0f172a] via-[#020617] to-[#0f172a]"></div>
+
       {/* Header */}
-      <Reveal show={visible} delay={d0}>
+      <Reveal show={visible} delay={0}>
         <div className="flex items-end justify-between gap-6 flex-wrap">
           <div>
             <h2 className="text-2xl font-semibold">Skills</h2>
@@ -154,39 +139,46 @@ export default function Skills() {
             </p>
           </div>
 
-          <div className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-slate-200">
+          <div className="
+            px-4 py-2 rounded-full border border-white/10 
+            bg-white/5 text-sm text-slate-200
+          ">
             {badgeText}
           </div>
         </div>
       </Reveal>
 
-      {/* Core Stack */}
-      <div className="mt-7">
-        <Reveal show={visible} delay={d0 + step}>
-          <h3 className="text-lg font-semibold text-white">Core Stack</h3>
-        </Reveal>
-
-        <Reveal show={visible} delay={d0 + step * 2}>
-          <p className="mt-1 text-sm text-slate-300">The technologies I use most often.</p>
-        </Reveal>
-
-        <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {coreStack.map((c, i) => (
-            <Reveal key={c.name} show={visible} delay={d0 + step * (3 + i)}>
-              <CoreChip name={c.name} note={c.note} />
-            </Reveal>
-          ))}
-        </div>
-      </div>
-
-      {/* Skill Cards */}
+      {/* Cards */}
       <div className="mt-10 grid md:grid-cols-2 gap-4">
         {skillGroups.map((g, i) => (
-          <Reveal key={g.title} show={visible} delay={d0 + step * (8 + i)}>
+          <Reveal key={g.title} show={visible} delay={step * (i + 1)}>
             <SkillCard title={g.title} desc={g.desc} items={g.items} />
           </Reveal>
         ))}
       </div>
+
+      {/* Animations */}
+      <style>{`
+        @keyframes popIn {
+          0% { opacity: 0; transform: scale(0.8) translateY(40px); }
+          60% { opacity: 1; transform: scale(1.05) translateY(-5px); }
+          100% { transform: scale(1) translateY(0); }
+        }
+
+        .animate-popIn {
+          animation: popIn 0.6s ease forwards;
+        }
+
+        @keyframes gradientMove {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 100% 50%; }
+        }
+
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradientMove 8s linear infinite;
+        }
+      `}</style>
     </section>
   );
 }

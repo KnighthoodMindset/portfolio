@@ -26,7 +26,7 @@ export default function Contact() {
 
           <div className="mt-3 flex flex-wrap gap-3">
             <a
-              href="https://www.linkedin.com/in/sweety-seleena-3810a9283/"
+              href="https://www.linkedin.com/in/sweety-kopparthi-3810a9283/"
               target="_blank"
               rel="noreferrer"
               className="px-4 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition"
