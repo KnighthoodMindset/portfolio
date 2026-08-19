@@ -18,12 +18,12 @@ const projects = [
     tags: ["HTML", "CSS", "JavaScript"],
   },
 
-  // ✅ Major project (no link) — non-clickable card
+  
   {
     title:
       "Restoring Trust in Social Media Commerce by Distinguishing Original and Replica Brands",
     desc: "Detects original vs replica brand promotions to reduce fake ads and restore trust in social media commerce.",
-    link: "", // keep empty
+    link: "https://og-badge-insta.netlify.app/", // keep empty
     tags: ["React", "MongoDB", "Python", "AI"],
   },
 
