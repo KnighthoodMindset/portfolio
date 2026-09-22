@@ -48,7 +48,7 @@ const projects = [
   {
     title: "QR Code Reader App",
     desc: "A web-based QR code scanner for instant reading and decoding.",
-    link: "https://bespoke-donut-cee7c6.netlify.app/",
+    link: "https://qr-by-km.netlify.app/",
     tags: ["React"],
   },
   {
